@@ -1,35 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Web Proxy</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google</title>
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #121212; color: white; }
-        input { padding: 10px; width: 300px; border-radius: 5px; border: none; }
-        button { padding: 10px 20px; margin-top: 10px; cursor: pointer; background: #5865F2; color: white; border: none; border-radius: 5px; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #202124;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 80px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .search-box {
+            background: #dfe1e5;
+            border-radius: 24px;
+            display: flex;
+            padding: 5px 15px;
+            align-items: center;
+        }
+        input {
+            background: transparent;
+            border: none;
+            height: 40px;
+            flex: 1;
+            font-size: 16px;
+            outline: none;
+            color: #000;
+        }
+        .info {
+            margin-top: 20px;
+            color: #9aa0a6;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
-    <h1>Access Web</h1>
-    <form id="proxy-form">
-        <input type="text" id="url" placeholder="Enter URL (e.g., discord.com)" required>
-        <button type="submit">Launch</button>
-    </form>
 
-    <script src="uv/uv.bundle.js"></script>
-    <script src="uv/uv.config.js"></script>
-    <script>
-        const form = document.getElementById('proxy-form');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const url = document.getElementById('url').value;
-            
-            // Register the service worker and redirect
-            window.navigator.serviceWorker.register('./sw.js', {
+<div class="container">
+    <h1>Web</h1>
+    <form id="proxy-form">
+        <div class="search-box">
+            <input type="text" id="url-input" placeholder="Search Google or type a URL" autocomplete="off">
+        </div>
+        <p class="info">Press Enter to Launch</p>
+    </form>
+</div>
+
+<script src="uv/uv.bundle.js"></script>
+<script src="uv/uv.config.js"></script>
+
+<script>
+    const form = document.getElementById('proxy-form');
+    const input = document.getElementById('url-input');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // 1. Register Service Worker
+        try {
+            await navigator.serviceWorker.register('./sw.js', {
                 scope: __uv$config.prefix
-            }).then(() => {
-                location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
             });
-        });
-    </script>
+
+            let url = input.value.trim();
+
+            // 2. Simple logic: if not a URL, search Google
+            if (!isUrl(url)) {
+                url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
+            } else if (!(url.startsWith('https://') || url.startsWith('http://'))) {
+                url = 'https://' + url;
+            }
+
+            // 3. Redirect to the proxy
+            window.location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
+            
+        } catch (err) {
+            alert('Failed to register proxy: ' + err.message);
+        }
+    });
+
+    function isUrl(val = '') {
+        if (/^http(s?):\/\//.test(val) || val.includes('.') && val.substr(0, 1) !== ' ') return true;
+        return false;
+    };
+</script>
+
 </body>
 </html>
