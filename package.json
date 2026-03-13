@@ -1,23 +1,15 @@
 {
-  "name": "school-proxy",
+  "name": "discord-unblocker",
   "version": "1.0.0",
-  "description": "A web proxy for accessing Discord and handling hCaptcha",
+  "description": "Proxy for Discord and hCaptcha",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [
-    "proxy",
-    "ultraviolet",
-    "unblock"
-  ],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-  "@titaniumnetwork-dev/ultraviolet": "^3.0.0",
-  "@tomphttp/bare-server-node": "^2.0.1",
-  "express": "^4.19.2"
+    "@titaniumnetwork-dev/ultraviolet": "^3.0.0",
+    "@tomphttp/bare-server-node": "^2.0.1",
+    "express": "^4.19.2"
   },
   "engines": {
     "node": ">=18.0.0"
