@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Proxy</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #121212; color: white; }
+        input { padding: 10px; width: 300px; border-radius: 5px; border: none; }
+        button { padding: 10px 20px; margin-top: 10px; cursor: pointer; background: #5865F2; color: white; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Access Web</h1>
+    <form id="proxy-form">
+        <input type="text" id="url" placeholder="Enter URL (e.g., discord.com)" required>
+        <button type="submit">Launch</button>
+    </form>
+
+    <script src="uv/uv.bundle.js"></script>
+    <script src="uv/uv.config.js"></script>
+    <script>
+        const form = document.getElementById('proxy-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const url = document.getElementById('url').value;
+            
+            // Register the service worker and redirect
+            window.navigator.serviceWorker.register('./sw.js', {
+                scope: __uv$config.prefix
+            }).then(() => {
+                location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
+            });
+        });
+    </script>
+</body>
+</html>
