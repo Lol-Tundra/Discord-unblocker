@@ -15,8 +15,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@titaniumnetwork-dev/ultraviolet": "^3.0.0",
-    "express": "^4.19.2"
+  "@titaniumnetwork-dev/ultraviolet": "^3.0.0",
+  "@tomphttp/bare-server-node": "^2.0.1",
+  "express": "^4.19.2"
   },
   "engines": {
     "node": ">=18.0.0"
